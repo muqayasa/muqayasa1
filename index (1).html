@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مقايسة التشطيب | اعرف تكلفة شقتك بند بند</title>
+<meta name="description" content="أداة مجانية تحسب مقايسة تشطيب الشقة بالتفصيل: مواد ومصنعية لكل بند، بأسعار قابلة للتعديل، وتطلع لك عرض سعر PDF.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap">
+<style>
+:root{--bg:#e9ecee;--card:#fff;--ink:#14232f;--mut:#5b6b78;--line:#d3d9de;--acc:#f2a900;--accink:#14232f;--ok:#1f7a4d;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a22;--card:#17262f;--ink:#e8eef2;--mut:#93a4b0;--line:#2a3d49;--ok:#4cc58a}}
+:root[data-theme="dark"]{--bg:#0f1a22;--card:#17262f;--ink:#e8eef2;--mut:#93a4b0;--line:#2a3d49;--ok:#4cc58a}
+*{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans Arabic",Tahoma,"Segoe UI",sans-serif;line-height:1.75;font-size:17px}
+.tape{height:10px;background:repeating-linear-gradient(90deg,var(--acc) 0 22px,var(--ink) 22px 26px)}
+.w{max-width:1040px;margin:0 auto;padding:0 18px}
+section{padding:44px 0}
+h1{font-size:clamp(30px,6vw,50px);line-height:1.25;margin:0 0 14px;font-weight:700}
+h2{font-size:clamp(23px,4vw,31px);line-height:1.3;margin:0 0 12px}
+p{margin:0 0 12px;max-width:62ch}
+.mut{color:var(--mut)}
+.hero{display:grid;gap:28px;padding-top:34px}
+@media(min-width:860px){.hero{grid-template-columns:1.1fr .9fr;align-items:center}}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.b{font:inherit;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 24px;border-radius:8px;background:var(--acc);color:var(--accink);border:2px solid var(--acc)}
+.b.g{background:transparent;color:var(--ink);border-color:var(--line);font-weight:500}
+.b:focus-visible,summary:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.sheet{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.sh{padding:14px 16px;border-bottom:3px solid var(--acc)}
+.sh b{display:block;font-size:17px}.sh small{color:var(--mut)}
+.sheet table{width:100%;border-collapse:collapse;font-size:15px}
+.sheet td{padding:9px 16px;border-bottom:1px solid var(--line)}
+.sheet td:last-child{text-align:left;font-variant-numeric:tabular-nums}
+.sheet tr.t td{font-weight:700;font-size:18px;border-top:2px solid var(--ink);border-bottom:0}
+.sheet .cap{padding:10px 16px;font-size:13px;color:var(--mut)}
+.cols{display:grid;gap:14px}
+@media(min-width:760px){.cols.c3{grid-template-columns:repeat(3,1fr)}.cols.c2{grid-template-columns:1fr 1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px}
+.card h3{margin:0 0 6px;font-size:18px}
+.card p{margin:0;color:var(--mut);font-size:16px}
+ol.st{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+ol.st li{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start}
+ol.st span{width:44px;height:44px;border-radius:50%;background:var(--acc);color:var(--accink);display:grid;place-items:center;font-weight:700}
+ol.st b{display:block}
+.bd{display:inline-block;font-size:13px;padding:1px 10px;border-radius:99px;border:1px solid var(--line);color:var(--mut);margin-inline-end:6px}
+.bd.p{color:var(--ok);border-color:var(--ok)}
+.soon{background:var(--card);border:2px solid var(--acc);border-radius:10px;padding:22px}
+.soon ul{margin:10px 0 0;padding-inline-start:20px}
+details{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:0 16px;margin-bottom:8px}
+summary{cursor:pointer;font-weight:700;padding:14px 0;min-height:44px}
+details p{color:var(--mut)}
+footer{padding:28px 0 40px;color:var(--mut);font-size:14px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<div class="tape"></div>
+<div class="w">
+
+<div class="hero">
+<div>
+<h1>اعرف تكلفة تشطيب شقتك بند بند، قبل ما تدفع جنيه</h1>
+<p class="mut">أدخل المساحة وعدد الغرف والحمامات. هتحصل على مقايسة كاملة: كمية ومواد ومصنعية لكل بند، بأسعار تعدّلها بنفسك، وعرض سعر جاهز للطباعة أو الحفظ PDF.</p>
+<div class="btns">
+<a class="b" id="tool" href="#">جرّب المقايسة مجانًا</a>
+<a class="b g" href="#pro">نسخة المقاولين</a>
+</div>
+<p class="mut" style="margin-top:12px;font-size:14px">مجانية بالكامل في النسخة الحالية، ومن غير تسجيل.</p>
+</div>
+
+<div class="sheet" aria-label="مثال لنتيجة المقايسة">
+<div class="sh"><b>مثال: شقة 100 م²، تشطيب متوسط</b><small>3 غرف | حمامين | ناتج الأداة بالأسعار الافتراضية</small></div>
+<table>
+<tr><td>الأرضيات والتجاليد</td><td>70,685</td></tr>
+<tr><td>المحارة</td><td>22,400</td></tr>
+<tr><td>الدهانات</td><td>44,880</td></tr>
+<tr><td>الكهرباء</td><td>61,770</td></tr>
+<tr><td>السباكة</td><td>38,300</td></tr>
+<tr><td>الأدوات الصحية</td><td>28,300</td></tr>
+<tr><td>الأبواب والألوميتال</td><td>62,500</td></tr>
+<tr><td>هالك المواد (7%)</td><td>15,146</td></tr>
+<tr class="t"><td>الإجمالي (ج.م)</td><td>343,981</td></tr>
+</table>
+<div class="cap">كل قسم بيتفتح في الأداة لبنوده: مثلاً السباكة فيها مواسير التغذية والصرف والعزل والمصنعية كل واحدة لوحدها.</div>
+</div>
+</div>
+
+<section>
+<div class="soon">
+<h2>معاك عرض سعر من مقاول أو شركة؟ اعرف هو مناسب ولا لأ</h2>
+<p>أدخل بيانات شقتك واكتب إجمالي عرض المقاول، وهتعرف في ثواني هل هو في المعقول ولا مبالغ فيه. النتيجة السريعة مجانية، وتقرير المراجعة الكامل (فروق الأقسام والعلامات والتقرير الجاهز) لمدة 30 يوم بـ100 جنيه.</p>
+<div class="btns"><a class="b" href="tool.html#chk">افحص عرض المقاول</a></div>
+</div>
+</section>
+
+<section>
+<h2>ليه المقايسة دي مختلفة</h2>
+<div class="cols c3">
+<div class="card"><h3>كل بند لوحده</h3><p>7 أقسام و27 بند (والمطبخ اختياري): طقم الحمام لوحده، المواسير لوحدها، المصنعية لوحدها. تعرف الفلوس رايحة فين بالظبط.</p></div>
+<div class="card"><h3>أسعارك انت</h3><p>الأسعار قابلة للتعديل بنداً بنداً. حط أسعار مورّدك وصنايعيتك، وشيل أي بند مش في شغلك.</p></div>
+<div class="card"><h3>عرض سعر باسمك</h3><p>اكتب اسمك واسم العميل، واطبع أو احفظ PDF جاهز تبعته على واتساب.</p></div>
+</div>
+</section>
+
+<section>
+<h2>تشتغل إزاي</h2>
+<ol class="st">
+<li><span>1</span><div><b>أدخل بيانات الوحدة</b><p class="mut">المساحة، الغرف، الحمامات، ومستوى التشطيب: اقتصادي أو متوسط أو لوكس.</p></div></li>
+<li><span>2</span><div><b>راجع البنود وعدّل الأسعار</b><p class="mut">افتح جدول الأسعار وحدّث أي رقم بسعر السوق عندك.</p></div></li>
+<li><span>3</span><div><b>احفظ عرض السعر</b><p class="mut">أضف هامش ربحك ونسبة الهالك، واحفظ النتيجة PDF.</p></div></li>
+</ol>
+</section>
+
+<section>
+<h2>الأسعار مش مخفية: كل رقم عليه مصدره</h2>
+<p>أي أداة بتطلع أرقام بدون ما تقولك جابتها منين بتخليك تجازف. هنا كل بند عليه علامة:</p>
+<div class="cols c2">
+<div class="card"><p><span class="bd p">منشور</span>رقم منشور في مصدر معروف، زي سعر البورسلين والباب والألوميتال.</p></div>
+<div class="card"><p><span class="bd">تقدير</span>تقسيم تقديري لتكلفة شاملة منشورة، لأن مفيش سعر منشور مستقل للبند الفرعي. ضبطه على أسعار موردك.</p></div>
+</div>
+<p class="mut" style="margin-top:14px;font-size:15px">مصادر الأسعار الافتراضية (نوفمبر 2026): تقرير فيتو عن أسعار مواد التشطيب بتاريخ 16 نوفمبر 2026، ودليل مصراوي لتكلفة تشطيب شقة 100 متر (أبريل 2026).</p>
+</section>
+
+<section id="pro">
+<div class="soon">
+<h2>نسخة المقاولين ومكاتب التشطيب</h2>
+<p>شغال في مقاولات؟ بنجهّز نسخة بمميزات تناسب شغلك اليومي، وبتدخل بالدور:</p>
+<ul>
+<li>حفظ مشاريع العملاء وتعديلها بعدين</li>
+<li>حفظ مجموعات أسعار بأسماء (مثلاً "أسعار الفيوم")</li>
+<li>بياناتك محفوظة ومتاحة على جهازين: موبايلك وكمبيوترك</li>
+</ul>
+<p><b>عرض المؤسسين: 300 جنيه شهرياً.</b> السعر ده يفضل ثابت لأول 30 مقاول يحجزوا، حتى لو ارتفع بعد كده. الحجز دلوقتي من غير دفع، والدفع بيتم عند تفعيل النسخة.</p><div class="btns"><a class="b wa" href="#" style="display:none">احجز مكانك بـ 300 جنيه شهرياً</a></div>
+<p class="mut" style="margin-top:12px;font-size:14px">المميزات دي قيد التجهيز وليست في النسخة المجانية الحالية.</p>
+</div>
+</section>
+
+<section>
+<h2>أسئلة شائعة</h2>
+<details><summary>الأرقام دقيقة؟</summary><p>هي تقدير للاسترشاد مبني على أسعار منشورة وقواعد كميات تقريبية لشقة سكنية عادية. السعر النهائي بيتحدد بعد معاينة الموقع وأسعار مورّدك، وعشان كده الأسعار قابلة للتعديل.</p></details>
+<details><summary>هي فعلاً مجانية؟</summary><p>أيوه، النسخة الحالية مجانية ومن غير تسجيل.</p></details>
+<details><summary>أحفظ النتيجة PDF إزاي؟</summary><p>اضغط "حفظ كـ PDF / طباعة" واختار "حفظ كـ PDF" من نافذة الطباعة. لو النافذة مفتحتش، افتح الأداة في تبويب مستقل.</p></details>
+<details><summary>شغالة على الموبايل؟</summary><p>أيوه، مصممة للموبايل والكمبيوتر.</p></details>
+<div class="btns"><a class="b tool2" href="#">ابدأ المقايسة دلوقتي</a></div>
+</section>
+
+<footer>المقايسة تقديرية للاسترشاد ولا تغني عن معاينة الموقع أو عرض سعر رسمي من مقاول.</footer>
+</div>
+
+<script>
+var TOOL="tool.html";
+var WA="201121587714";
+document.getElementById("tool").href=TOOL;
+Array.prototype.forEach.call(document.querySelectorAll(".tool2"),function(a){a.href=TOOL});
+if(WA){Array.prototype.forEach.call(document.querySelectorAll(".wa"),function(a){a.href="https://wa.me/"+WA+"?text="+encodeURIComponent("عايز أحجز مكاني في عرض المؤسسين (300 جنيه شهرياً) لنسخة المقاولين لأداة المقايسة");a.style.display="inline-flex"})}
+</script>
+</body>
+</html>

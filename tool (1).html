@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مقايسة التشطيب | احسب تكلفة شقتك في دقيقتين</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap">
+<style>
+:root{--bg:#e9ecee;--card:#fff;--ink:#14232f;--mut:#5b6b78;--line:#d3d9de;--acc:#f2a900;--accink:#14232f;--ok:#1f7a4d;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a22;--card:#17262f;--ink:#e8eef2;--mut:#93a4b0;--line:#2a3d49;--acc:#f2a900;--accink:#14232f;--ok:#4cc58a}}
+:root[data-theme="dark"]{--bg:#0f1a22;--card:#17262f;--ink:#e8eef2;--mut:#93a4b0;--line:#2a3d49;--acc:#f2a900;--accink:#14232f;--ok:#4cc58a}
+*{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans Arabic",Tahoma,"Segoe UI",sans-serif;line-height:1.7;font-size:16px}
+.tape{height:10px;background:repeating-linear-gradient(90deg,var(--acc) 0 22px,var(--ink) 22px 26px)}
+.wrap{max-width:1040px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:clamp(26px,5vw,40px);line-height:1.25;margin:18px 0 6px;font-weight:700}
+.sub{color:var(--mut);margin:0 0 22px;max-width:60ch}
+.grid{display:grid;gap:18px;grid-template-columns:1fr}
+@media(min-width:860px){.grid{grid-template-columns:340px 1fr;align-items:start}.side{position:sticky;top:16px}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px}
+.card h2{font-size:17px;margin:0 0 12px}
+label{display:block;font-size:14px;color:var(--mut);margin:12px 0 4px}
+input,select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:10px 12px;min-height:44px}
+input:focus-visible,select:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--acc);outline-offset:1px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.seg button{font:inherit;min-height:44px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:6px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--acc);color:var(--accink);border-color:var(--acc);font-weight:700}
+.btn{font:inherit;font-weight:700;min-height:48px;width:100%;border:0;border-radius:8px;background:var(--acc);color:var(--accink);cursor:pointer;margin-top:16px}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);margin-top:8px;font-weight:500}
+.sheet{padding:0;overflow:hidden}
+.sh-head{padding:16px 18px;border-bottom:3px solid var(--acc);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.sh-head b{font-size:19px}
+.sh-head small{color:var(--mut);display:block}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:560px;font-size:15px}
+th,td{padding:10px 14px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-weight:500;color:var(--mut);font-size:13px;background:var(--bg)}
+td.n,th.n{text-align:left;font-variant-numeric:tabular-nums}
+.tot{padding:14px 18px;display:grid;gap:6px}
+.tot div{display:flex;justify-content:space-between;gap:10px}
+.tot .g{font-size:22px;font-weight:700;border-top:2px solid var(--ink);padding-top:10px;margin-top:6px}
+.tot .pm{color:var(--ok);font-weight:500}
+.note{font-size:13px;color:var(--mut);padding:0 18px 16px;margin:0}
+details{margin-top:18px}
+summary{cursor:pointer;font-weight:700;padding:12px 0}
+.pt td,.pt th{padding:6px 8px}
+.pt input{min-height:38px;padding:6px 8px;width:92px}
+.pt input[type=checkbox]{width:20px;min-height:20px}
+.warn{border-inline-start:4px solid var(--acc);background:var(--bg);padding:10px 12px;font-size:14px;border-radius:4px;margin-top:12px}
+tr.sec td{background:var(--bg);font-weight:700}
+.bd{font-size:12px;padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--mut)}
+.bd.p{color:var(--ok);border-color:var(--ok)}
+.li{display:flex;gap:6px;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)}.li button{font:inherit;min-height:36px;padding:0 12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:6px;cursor:pointer}
+.print-only{display:none}
+@media print{
+body{background:#fff;color:#000}.tape,.side,details,.noprint,h1,.sub{display:none!important}
+.grid{display:block}.card{border:0}.print-only{display:block}
+.sheet{border:1px solid #999}th{background:#eee}
+}
+.grid>*{min-width:0}.tw{overflow-x:auto}
+#lvl,#stg{flex-wrap:wrap}label.ck{display:flex;gap:10px;align-items:center;margin:8px 0;font-size:15px}.ck input{width:20px;height:20px;min-height:0;flex:none;margin:0}
+</style>
+</head>
+<body>
+<div class="tape"></div>
+<div class="wrap">
+<h1>احسب مقايسة التشطيب أو العظم في دقيقتين</h1>
+<p class="sub">أدخل المساحة وعدد الغرف، وهتحصل على كميات وتكلفة كل بند: مواد ومصنعية. الأسعار قابلة للتعديل حسب سوق منطقتك.</p>
+
+<div class="grid">
+<div class="side">
+<div class="card">
+<div class="seg" id="md"><button type="button" data-m="fin" aria-pressed="true">تشطيب وحدة</button><button type="button" data-m="villa" aria-pressed="false">تشطيب فيلا</button><button type="button" data-m="house" aria-pressed="false">عظم بيت</button><button type="button" data-m="tower" aria-pressed="false">عظم برج/عمارة</button></div>
+<h2 id="h2u" style="margin-top:14px">بيانات الوحدة</h2>
+<label for="area" id="larea">المساحة بالمتر المربع</label>
+<input id="area" type="number" inputmode="decimal" min="20" max="1000" value="120">
+<div class="row2 apt">
+<div><label for="rooms">عدد الغرف</label><input id="rooms" type="number" inputmode="numeric" min="1" max="12" value="3"></div>
+<div><label for="baths">عدد الحمامات</label><input id="baths" type="number" inputmode="numeric" min="1" max="8" value="2"></div>
+</div>
+<div class="fin"><label>مستوى التشطيب</label>
+<div class="seg" id="lvl">
+<button type="button" data-v="eco" aria-pressed="false">اقتصادي</button>
+<button type="button" data-v="mid" aria-pressed="true">متوسط</button>
+<button type="button" data-v="lux" aria-pressed="false">لوكس</button>
+<button type="button" data-v="sup" aria-pressed="false">سوبر لوكس</button>
+<button type="button" data-v="ult" aria-pressed="false">ألترا</button>
+</div>
+<label>المبنى واقف على إيه دلوقتي؟</label>
+<div class="seg" id="stg"><button type="button" data-g="brick" aria-pressed="true">على الطوب الأحمر</button><button type="button" data-g="plaster" aria-pressed="false">على المحارة</button><button type="button" data-g="half" aria-pressed="false">نص تشطيب</button></div>
+</div>
+<div class="fin"><label for="flt">نوع الأرضية</label><select id="flt"><option value="auto">حسب مستوى التشطيب (تلقائي)</option><option value="por">بورسلين</option><option value="cer">سيراميك</option><option value="mar">رخام</option><option value="gra">جرانيت</option><option value="par">باركيه HDF</option><option value="vin">فينيل SPC</option></select>
+<label>إضافات اختيارية</label>
+<div id="adds"><label class="ck"><input type="checkbox" data-grp="gy">جبس وأسقف معلقة وإضاءة مخفية</label><label class="ck"><input type="checkbox" data-grp="ac">تكييف (سبليت وتأسيس)</label><label class="ck"><input type="checkbox" data-grp="kit">مطبخ (وحدات ورخامة وغاز)</label></div>
+<div id="klw" style="display:none"><label for="klen">طول المطبخ (متر طولي)</label><input id="klen" type="number" inputmode="decimal" min="0" max="30" value="5"></div></div>
+<div class="flr" style="display:none"><label for="floors">عدد الأدوار (شامل الأرضي)</label><input id="floors" type="number" inputmode="numeric" min="1" max="40" value="3"></div>
+<div class="str" style="display:none">
+<div id="fndw"><label for="fnd">نوع الأساس</label><select id="fnd"><option value="0">قواعد منفصلة</option><option value="1">لبشة</option></select></div>
+<div id="liftw" style="display:none"><label for="lifts">عدد المصاعد</label><input id="lifts" type="number" inputmode="numeric" min="0" max="6" value="1"></div></div>
+<div class="vil" style="display:none"><label for="land">مساحة الأرض (م²)</label><input id="land" type="number" inputmode="decimal" min="50" max="5000" value="400">
+<label class="ck"><input type="checkbox" id="bsm">يوجد بدروم</label>
+<label for="fac">نوع الواجهة</label><select id="fac"><option value="mix">ميكس (حجر للواجهة الرئيسية + دهان وهارد كوت)</option><option value="stone">حجر</option><option value="paint">دهانات خارجية</option><option value="hard">هارد كوت / جرافياتو</option></select>
+<details style="margin-top:10px"><summary style="cursor:pointer;color:var(--a)">تخصيص أدق للمقايسة (اختياري)</summary>
+<label for="vb">عدد الحمامات (فاضي = تلقائي)</label><input id="vb" type="number" inputmode="numeric" min="1" max="30" placeholder="تلقائي">
+<label for="vr">عدد الغرف (فاضي = تلقائي)</label><input id="vr" type="number" inputmode="numeric" min="1" max="40" placeholder="تلقائي">
+<label for="vk">عدد المطابخ</label><input id="vk" type="number" inputmode="numeric" min="1" max="6" value="1">
+<label class="ck"><input type="checkbox" id="pool">حمام سباحة</label><label for="parea">مساحة حمام السباحة (م²)</label><input id="parea" type="number" inputmode="decimal" min="10" max="300" value="32">
+<label class="ck"><input type="checkbox" id="lnd">سور وبوابات ولاندسكيب</label></details></div>
+<label for="regsel">المنطقة (تقريبي، عدّل المعامل بعدها حسب سوقك)</label>
+<select id="regsel"><option value="">مخصص</option><option value="100">القاهرة الكبرى</option><option value="95">الإسكندرية</option><option value="92">الدلتا</option><option value="90">الصعيد</option><option value="88">الفيوم وبني سويف والمنيا</option></select>
+<div class="row2">
+<div><label for="reg">معامل المنطقة %</label><input id="reg" type="number" inputmode="decimal" value="100" min="50" max="200"></div>
+<div><label for="waste">هالك المواد %</label><input id="waste" type="number" inputmode="decimal" value="7" min="0" max="30"></div>
+</div>
+<label for="prof">هامش ربح المقاول %</label>
+<input id="prof" type="number" inputmode="decimal" value="0" min="0" max="50">
+</div>
+
+<div class="card" style="margin-top:14px">
+<h2>بيانات العرض (تظهر في الـ PDF)</h2>
+<label for="co">اسم المقاول أو المكتب</label>
+<input id="co" type="text" placeholder="مثال: مكتب النور للتشطيبات">
+<label for="cl">اسم العميل</label>
+<input id="cl" type="text" placeholder="اختياري">
+<button class="btn" id="pr" type="button">حفظ كـ PDF / طباعة</button>
+<p class="note" style="padding:8px 0 0">لو الطباعة مش بتفتح، افتح الصفحة في نافذة مستقلة.</p>
+</div>
+<div class="card" id="pro" style="margin-top:14px">
+<h2>النسخة المدفوعة للمقاولين</h2>
+<div id="lockBox">
+<p class="note" style="padding:0" id="proInfo">حفظ المشاريع ومجموعات الأسعار، ومتاحة على جهازين.</p>
+<label for="lic">كود التفعيل</label>
+<input id="lic" type="text" dir="ltr" placeholder="XXXX-XXXX-XXXX-XXXX" autocomplete="off">
+<button class="btn" id="act" type="button">تفعيل</button>
+<p class="note" style="padding:8px 0 0" id="actMsg" role="status"></p>
+</div>
+<div id="proBox" style="display:none">
+<p id="who" style="margin:0 0 8px"></p>
+<label for="pname">حفظ المشروع الحالي باسم</label>
+<input id="pname" type="text" placeholder="مثال: شقة أحمد - الفيوم">
+<button class="btn" id="psave" type="button">حفظ المشروع</button>
+<div id="plist"></div>
+<label for="sname">حفظ الأسعار الحالية كمجموعة باسم</label>
+<input id="sname" type="text" placeholder="مثال: أسعار الفيوم">
+<button class="btn ghost" id="ssave" type="button">حفظ مجموعة الأسعار</button>
+<div id="slist"></div>
+</div>
+</div>
+</div>
+
+<div>
+<div class="card sheet" id="sheet">
+<div class="sh-head">
+<div><b id="hCo">مقايسة تشطيب</b><small id="hMeta"></small></div>
+<div style="text-align:left"><small id="hDate"></small><small id="hCl"></small></div>
+</div>
+<div class="tw"><table>
+<thead><tr><th>البند</th><th class="n">الكمية</th><th>الوحدة</th><th class="n">سعر الوحدة</th><th class="n">الإجمالي</th></tr></thead>
+<tbody id="rows"></tbody>
+</table></div>
+<div class="tot" id="tot"></div>
+<p class="note" id="snote">المقايسة تقديرية للاسترشاد، وتعتمد على الأسعار المدخلة وعلى معاينة الموقع. الكميات محسوبة بقواعد تقريبية لشقة سكنية عادية.</p>
+<p class="note" id="excl"></p>
+<p class="note print-only" id="brand">أُعدّت بواسطة أداة مقايسة التشطيب، احسب مقايسة شقتك مجانًا.</p>
+</div>
+
+<div class="card noprint" id="chk" style="margin-top:18px">
+<h2>فحص عرض المقاول</h2>
+<p class="note" style="padding:0">معاك عرض سعر من مقاول أو شركة؟ اكتب إجماليه، وتقدر تفصّله حسب القسم وهنطلعلك تقرير مراجعة جاهز.</p>
+<label for="qt">إجمالي عرض المقاول (ج.م)</label>
+<input id="qt" type="number" inputmode="decimal" min="0" placeholder="مثال: 350000">
+<label style="margin-top:12px">إجمالي كل قسم في العرض (اختياري)</label>
+<div id="qsec" class="row2"></div>
+<label style="margin-top:12px">لاحظت حاجة في العقد أو العرض؟ (علّم عليها)</label>
+<div id="qfl"></div>
+<div id="qres" role="status" style="margin:12px 0"></div>
+<div id="qlock" style="display:none;margin-bottom:10px">
+<label for="rcode">عندك كود فتح التقرير؟</label>
+<input id="rcode" type="text" dir="ltr" placeholder="R-XXXX-XXXX" autocomplete="off">
+<button class="btn ghost" id="rgo" type="button" style="margin-top:8px">فتح التقرير</button>
+<p class="note" id="rmsg" style="padding:8px 0 0" role="status"></p>
+</div>
+<button class="btn" id="qcp" type="button" style="display:none;margin-bottom:8px">انسخ تقرير المراجعة</button>
+<a class="btn" id="qwa" href="#" style="display:none;align-items:center;justify-content:center;text-decoration:none"></a>
+</div>
+<details class="card noprint">
+<summary>جدول الأسعار والبنود (عدّل حسب سوقك)</summary>
+<div class="warn">آخر تحديث: نوفمبر 2026. «منشور» = رقم منشور: السيراميك والبورسلين من تقرير فيتو بتاريخ 16 نوفمبر 2026، والباب والألوميتال من دليل مصراوي (أبريل 2026). «تقدير» = تقسيم تقديري لتكلفة شاملة منشورة في دليل مصراوي لشقة 100 م² إلى مواد ومصنعية وبنود فرعية، ولا يوجد له سعر منشور مستقل. «غير مؤكد» = لم يتوفر له سعر موثوق (مستبعد افتراضياً). راجع كل رقم مع موردينك قبل أي عرض. تتحفظ في متصفحك.</div>
+<div class="tw"><table class="pt">
+<thead><tr><th>تضمين</th><th>البند</th><th>مواد / وحدة</th><th>مصنعية / وحدة</th><th>المصدر</th></tr></thead>
+<tbody id="ptb"></tbody></table></div>
+<button class="btn ghost" id="rs" type="button">استرجاع الأسعار الافتراضية</button>
+</details>
+</div>
+</div>
+</div>
+
+<script>
+function I(id,s,n,u,q,m,l,src,off){return{id:id,s:s,n:n,u:u,q:q,m:m,l:l,src:src,on:!off}}
+var SEC=["الأرضيات والتجاليد","المحارة","الدهانات","الكهرباء","السباكة","الأدوات الصحية","الأبواب والألوميتال","المطبخ","الحفر والأساسات","الهيكل الخرساني","المباني","المصاعد","الجبس والأسقف المعلقة","التكييف","الواجهات الخارجية","السلالم والبدروم","السور واللاندسكيب","حمام السباحة"];
+var SRC={p:"منشور",e:"تقدير",u:"غير مؤكد"};
+function fA(A,B){return Math.max(0,A-B*4-8)}
+function wA(B){return B*26+20}
+function pA(A,B){return Math.max(0,A*3.2-(B*22+12))}
+function pts(A){return Math.round(A*0.65)}
+function pp(B){return B*6+4}
+var ITEMS=[
+I("fl",0,"بورسلين أرضيات الغرف والصالة","م²",function(A,R,B){return fA(A,B)},300,0,"p"),
+I("wt",0,"بلاط حمامات ومطبخ (أرضيات وحوائط)","م²",function(A,R,B){return wA(B)},200,0,"e"),
+I("ad",0,"لاصق سيراميك","شيكارة",function(A,R,B){return Math.ceil((fA(A,B)+wA(B))/4.5)},175,0,"p"),
+I("tl",0,"مصنعية تركيب الأرضيات والبلاط","م²",function(A,R,B){return fA(A,B)+wA(B)},0,160,"e"),
+I("pm",1,"مواد المحارة (أسمنت ورمل)","م²",function(A){return A*3.2},30,0,"e"),
+I("pl",1,"مصنعية المحارة","م²",function(A){return A*3.2},0,40,"e"),
+I("p1",2,"معجون وسيلر","م²",function(A,R,B){return pA(A,B)},35,0,"e"),
+I("p2",2,"دهان نهائي","م²",function(A,R,B){return pA(A,B)},55,0,"e"),
+I("p3",2,"مصنعية الدهانات","م²",function(A,R,B){return pA(A,B)},0,80,"e"),
+I("ew",3,"تأسيس: مواسير وعلب وأسلاك نحاس","نقطة",function(A){return pts(A)},300,0,"e"),
+I("es",3,"مفاتيح وبرايز","قطعة",function(A){return Math.round(pts(A)*0.6)},180,0,"e"),
+I("ep",3,"لوحة كهرباء وقواطع","لوحة",function(){return 1},6000,0,"e"),
+I("el",3,"وحدات إنارة بسيطة","وحدة",function(A){return Math.round(A/8)},250,0,"e"),
+I("eb",3,"مصنعية الكهرباء (تأسيس وتركيب)","نقطة",function(A){return pts(A)},0,400,"e"),
+I("pw",4,"مواسير تغذية PPR وقطعها","نقطة",function(A,R,B){return pp(B)},500,0,"e"),
+I("pd",4,"مواسير صرف PVC وقطعها","نقطة",function(A,R,B){return B*4+3},500,0,"e"),
+I("pi",4,"عزل الحمامات","م²",function(A,R,B){return B*8},120,80,"e"),
+I("ph",4,"تأسيس سخان وغسالة","نقطة",function(){return 2},1500,500,"e"),
+I("pb",4,"مصنعية السباكة","نقطة",function(A,R,B){return pp(B)},0,1100,"e"),
+I("sw",5,"قاعدة مرحاض وخزان","طقم",function(A,R,B){return B},5000,0,"e"),
+I("sb",5,"حوض غسيل بوحدته","طقم",function(A,R,B){return B},3000,0,"e"),
+I("sm",5,"خلاطات الحمام (حوض ودش وشطاف)","قطعة",function(A,R,B){return B*3},1200,0,"e"),
+I("sk",5,"حوض وخلاط المطبخ","طقم",function(){return 1},3500,0,"e"),
+I("si",5,"مصنعية تركيب الأدوات الصحية","حمام",function(A,R,B){return B},0,800,"e"),
+I("dr",6,"أبواب داخلية (مع التركيب)","باب",function(A,R,B){return R+B},3800,400,"p"),
+I("en",6,"باب المدخل","باب",function(){return 1},5000,500,"e"),
+I("al",6,"ألوميتال الشبابيك","م²",function(A){return Math.round(A*0.12*10)/10},2700,300,"p"),
+I("kt",7,"مطبخ: وحدات أرضي وعلوي (بتركيبها)","متر طولي",function(){return KL},6000,250,"u",true)
+];
+function J(id,s,n,u,q,m,l,src,tg,off){var o=I(id,s,n,u,q,m,l,src,off);o.md=tg;return o}
+var MD="fin",STG="brick",GN=1,GR=false,GL=0;
+function cvol(A){return A*(GR?0.6:0.22)+A*GN*(MD=="tower"?0.30:0.27)}
+function stl(A){var tw=MD=="tower";return(A*(GR?0.6:0.22)*90+A*GN*(tw?0.30:0.27)*(tw?125:115))/1000}
+function bk(A){return A*GN*(MD=="tower"?0.07:0.075)}
+ITEMS.push(
+J("xd",8,"حفر ونقل ناتج الحفر","م³",function(A){return A*(GR?2.0:1.6)},0,90,"e","h"),
+J("xn",8,"خرسانة عادية (نظافة)","م³",function(A){return A*(GR?0.1:0.06)},1700,120,"e","h"),
+J("xc",9,"خرسانة مسلحة (أساسات وأعمدة وأسقف)","م³",cvol,2300,150,"e","h"),
+J("xs",9,"حديد تسليح","طن",stl,41000,0,"p","h"),
+J("xf",9,"نجارة مسلحة (شدات)","م³",cvol,350,650,"e","h"),
+J("xh",9,"مصنعية حدادة (تقطيع وتشكيل وتركيب)","طن",stl,0,2800,"e","h"),
+J("xb",10,"طوب أحمر","ألف طوبة",bk,3500,0,"u","h"),
+J("xm",10,"مونة البناء (أسمنت ورمل)","م³",function(A){return bk(A)*0.3},1600,0,"e","h"),
+J("xl",10,"مصنعية بناء الطوب","ألف طوبة",bk,0,1100,"e","h"),
+J("xe",11,"مصعد (سعر المحطة)","محطة",function(){return GL*GN},90000,0,"u","t")
+);
+function R5(m,l){l=l||m;return{eco:[m[0],l[0]],mid:[1,1],lux:[m[1],l[1]],sup:[m[2],l[2]],ult:[m[3],l[3]]}}
+var MX={};
+function mx(ids,m,l){ids.split(",").forEach(function(k){MX[k]=R5(m,l)})}
+mx("pm,pl",[1,1.3,1.5,1.85]);
+mx("ew,es,ep,el,eb",[.64,1.15,1.6,3.2]);
+mx("pw,pd,pi,ph,pb",[.58,1.15,1.8,3.2]);
+mx("fl,wt",[.63,2,4,8],[.93,1.86,2.14,2.7]);
+mx("ad",[.9,1.3,1.6,2]);
+mx("tl",[1,1,1,1],[.93,1.86,2.14,2.7]);
+mx("gy1,gy2,gy3,gy4",[.4,1.8,2,3.7]);
+mx("p1,p2,p3",[.63,1.1,1.45,1.85]);
+mx("en",[.65,1.6,2.1,4.3]);mx("dr",[.58,1.42,1.8,3.1]);mx("al",[.69,1.1,1.5,2.6]);
+mx("sw,sb,sm,sk",[.47,1.9,2.4,5.3],[.9,1.2,1.4,1.7]);
+mx("si",[1,1,1,1],[.9,1.2,1.4,1.7]);
+var FLAUTO={eco:"سيراميك فرز تاني للأرضيات",mid:"سيراميك فرز أول للأرضيات",lux:"بورسلين للأرضيات",sup:"بورسلين مستورد أو HDF للأرضيات",ult:"رخام مستورد أو ألواح بورسلين كبيرة للأرضيات"};
+var KL=5,FLK="auto",GFA=1,AE=1,BSM=false,LAND=400,FAC="mix",POOL=false,LND=false,PA=32;
+var FS={mix:[.3,.4,.3],stone:[1,0,0],paint:[0,1,0],hard:[0,0,1]},FACN={mix:"ميكس (حجر ودهان)",stone:"حجر",paint:"دهانات",hard:"هارد كوت"};
+function FAr(){return 4*Math.sqrt(GFA)*(3.2*GN+0.8)*0.85}
+function stp(){return Math.max(0,GN-1+(BSM?1:0))*18}
+function VM(){return f(AE)+" م² مسطح مبني | "+GN+(BSM?" أدوار + بدروم":" أدوار")+" | واجهة "+FACN[FAC]+" | "+STGS[STG]}
+ITEMS.push(
+J("fs",14,"حجر هاشمي/طبيعي للواجهات (توريد وتركيب)","م²",function(){return FAr()*FS[FAC][0]},420,280,"u","v"),
+J("fp",14,"دهانات خارجية (جوتن/سايبس) بالتأسيس","م²",function(){return FAr()*FS[FAC][1]},90,70,"u","v"),
+J("fh",14,"هارد كوت / جرافياتو","م²",function(){return FAr()*FS[FAC][2]},70,90,"u","v"),
+J("fx",14,"محارة خارجية للواجهات","م²",function(){return FAr()},45,65,"u","v"),
+J("fb",14,"سقالات وأعمال الواجهات","م²",function(){return FAr()},0,45,"u","v"),
+J("st1",15,"درج السلم (رخام)","درجة",function(){return stp()},650,150,"u","v"),
+J("st2",15,"درابزين السلم (حديد أو ألوميتال)","متر طولي",function(){return stp()*0.3},1800,300,"u","v"),
+J("bsi",15,"عزل أساسات وجدران البدروم","م²",function(){return BSM?GFA+4*Math.sqrt(GFA)*3:0},260,140,"u","v"),
+J("vf",16,"سور خارجي (طوب وخرسانة ودهان)","متر طولي",function(){return LND?4*Math.sqrt(LAND):0},2200,1300,"u","v"),
+J("vg",16,"بوابة رئيسية وباب جانبي","وحدة",function(){return LND?1:0},35000,3000,"u","v"),
+J("vl",16,"لاندسكيب وتنسيق حدائق","م²",function(){return LND?Math.max(0,LAND-GFA)*0.6:0},250,150,"u","v"),
+J("vp1",17,"حمام سباحة خرساني (بعزل وتشطيب)","م²",function(){return POOL?PA:0},6500,4000,"u","v"),
+J("vp2",17,"معدات حمام السباحة (فلاتر ومضخات)","وحدة",function(){return POOL?1:0},90000,10000,"u","v")
+);
+var FLT={por:{n:"بورسلين أرضيات الغرف والصالة",m:1,l:1},cer:{n:"سيراميك أرضيات الغرف والصالة",m:.65,l:.9},mar:{n:"رخام أرضيات الغرف والصالة",m:2.4,l:1.6},gra:{n:"جرانيت أرضيات الغرف والصالة",m:3,l:1.8},par:{n:"باركيه HDF أرضيات الغرف والصالة",m:1.4,l:.6},vin:{n:"فينيل SPC أرضيات الغرف والصالة",m:1.1,l:.6}};
+var GRP={gy:["gy1","gy2","gy3","gy4"],ac:["ac1","ac2"],kit:["kt","kc","kg"]};
+ITEMS.push(
+J("gy1",12,"جبس بورد أسقف (ألواح وهيكل معدني)","م²",function(A){return A*0.6},120,80,"u","f",true),
+J("gy2",12,"كرانيش وإضاءة مخفية (بروفايل وليد)","متر طولي",function(A){return A*0.45},50,25,"u","f",true),
+J("gy3",12,"معجون ودهان أسقف الجبس","م²",function(A){return A*0.6},25,20,"u","f",true),
+J("gy4",12,"سبوتات إنارة LED للأسقف","قطعة",function(A){return Math.round(A/3)},70,20,"u","f",true),
+J("ac1",13,"تكييف سبليت إنفرتر (وحدة بتركيبها)","وحدة",function(A,R){return R+1},26000,1500,"u","f",true),
+J("ac2",13,"تأسيس التكييف (نحاس وصرف وكهرباء)","نقطة",function(A,R){return R+1},2500,1200,"u","f",true),
+J("kc",7,"رخامة أو جرانيت المطبخ","متر طولي",function(){return KL},2200,300,"u","f",true),
+J("kg",7,"تمديد غاز طبيعي للمطبخ والسخان","وحدة",function(){return 1},3500,1500,"u","f",true)
+);
+function inc(id){return P[id].on&&STF[STG][id]!==0}
+function EX(){var e=[];if(!inc("kt"))e.push("المطبخ");if(!inc("ac1"))e.push("التكييف");if(!inc("gy1"))e.push("الجبس والأسقف المعلقة");e.push("النجارة والديكورات","الأجهزة الكهربائية");return e.join("، ")+"."}
+function vis(i){var g=i.md||"f";return MD=="fin"?g=="f":MD=="villa"?(g=="f"||g=="v"):(g=="h"||(g=="t"&&MD=="tower"))}
+var STF={brick:{},plaster:{pm:0,pl:0,ew:0,pw:0,pd:0,ph:0,eb:.35,pb:.35},half:{gy1:0,gy2:0,gy3:0,gy4:0,ac1:0,kc:0,p2:0,p3:.5,es:0,ep:0,el:0,eb:.65,pb:.65,sw:0,sb:0,sm:0,sk:0,si:0,dr:0,en:0,al:0,kt:0}};
+var STGN={brick:"على الطوب الأحمر (كل الأعمال)",plaster:"على المحارة (المحارة والتأسيس معمولين)",half:"نص تشطيب (محارة وتأسيس وأرضيات ومعجون، بدون دهان نهائي وأبواب وأجهزة صحية)"};
+var STGS={brick:"من الطوب الأحمر",plaster:"على المحارة",half:"نص تشطيب"};
+var LV={eco:{m:.8,l:.9},mid:{m:1,l:1},lux:{m:1.5,l:1.2},sup:{m:2,l:1.4},ult:{m:2.8,l:1.7}};
+var LVN={eco:"اقتصادي",mid:"متوسط",lux:"لوكس",sup:"سوبر لوكس",ult:"ألترا سوبر لوكس"};
+var K="muq_prices_v3",P={},lvl="mid";
+function load(){P={};ITEMS.forEach(function(i){P[i.id]={m:i.m,l:i.l,on:i.on!==false}});
+try{var s=localStorage.getItem(K);if(s){var o=JSON.parse(s);ITEMS.forEach(function(i){if(o[i.id])P[i.id]=o[i.id]})}}catch(e){}}
+function save(){try{localStorage.setItem(K,JSON.stringify(P))}catch(e){}}
+function $(i){return document.getElementById(i)}
+function num(id,d,lo,hi){var v=parseFloat($(id).value);if(isNaN(v))v=d;return Math.min(hi,Math.max(lo,v))}
+function f(x){return Math.round(x).toLocaleString("en-US")}
+function calc(){
+var A=num("area",120,20,1000),R=Math.round(num("rooms",3,1,12)),B=Math.round(num("baths",2,1,8));
+KL=num("klen",5,0,30);AE=A;
+if(MD=="villa"){GFA=A;GN=Math.round(num("floors",3,1,6));BSM=$("bsm").checked;LAND=num("land",400,50,5000);FAC=$("fac").value;POOL=$("pool").checked;LND=$("lnd").checked;PA=num("parea",32,10,300);AE=A*(GN+(BSM?1:0));var vr=parseInt($("vr").value),vb=parseInt($("vb").value);R=vr>0?vr:Math.max(3,Math.round(AE/50));B=vb>0?vb:Math.max(2,Math.round(AE/70));KL=num("klen",5,0,30)*num("vk",1,1,6)}
+if(MD=="house"||MD=="tower"){GN=Math.round(num("floors",3,1,40));GR=MD=="tower"?true:$("fnd").value=="1";GL=Math.round(num("lifts",1,0,6))}
+var rg=num("reg",100,50,200)/100,ws=num("waste",7,0,30)/100,pf=num("prof",0,0,50)/100;
+var fn=MD=="fin"||MD=="villa",lm=fn?LV[lvl].m:1,ll=fn?LV[lvl].l:1,mat=0,lab=0,h="";
+SEC.forEach(function(sn,si){
+var rows="",st=0;
+ITEMS.forEach(function(i){
+if(i.s!==si||!P[i.id].on||!vis(i))return;var fc=fn&&STF[STG][i.id]!=null?STF[STG][i.id]:1;if(!fc)return;
+var p=P[i.id],qt=i.q(AE,R,B),vv=i.md=="v",xm=fn&&MX[i.id]?MX[i.id][lvl]:null,m=p.m*(vv?1:xm?xm[0]:lm)*rg*fc,l=p.l*(vv?1:xm?xm[1]:ll)*rg*fc;if(vv&&!qt)return;if(i.id=="fl"&&FLK!="auto")m=p.m*rg*fc*FLT[FLK].m;if(i.id=="tl"&&FLK!="auto")l=p.l*rg*fc*FLT[FLK].l;
+mat+=qt*m;lab+=qt*l;st+=qt*(m+l);
+var qs=(qt%1===0)?f(qt):qt.toFixed(1);
+rows+="<tr><td>"+(i.id=="fl"?(FLK=="auto"?FLAUTO[lvl]:FLT[FLK].n):i.n)+"</td><td class='n'>"+qs+"</td><td>"+i.u+"</td><td class='n'>"+f(m+l)+"</td><td class='n'>"+f(qt*(m+l))+"</td></tr>";
+});
+ST[si]=st;if(rows)h+="<tr class='sec'><td colspan='4'>"+sn+"</td><td class='n'>"+f(st)+"</td></tr>"+rows;
+});
+$("rows").innerHTML=h||"<tr><td colspan='5'>فعّل بند واحد على الأقل من جدول الأسعار.</td></tr>";
+var wv=mat*ws,sub=mat+lab+wv,pv=sub*pf,g=sub+pv;
+$("tot").innerHTML=
+"<div><span>إجمالي المواد</span><span>"+f(mat)+" ج.م</span></div>"+
+"<div><span>إجمالي المصنعية</span><span>"+f(lab)+" ج.م</span></div>"+
+"<div><span>هالك المواد ("+Math.round(ws*100)+"%)</span><span>"+f(wv)+" ج.م</span></div>"+
+(pf>0?"<div><span>هامش الربح ("+Math.round(pf*100)+"%)</span><span>"+f(pv)+" ج.م</span></div>":"")+
+"<div class='g'><span>الإجمالي</span><span>"+f(g)+" ج.م</span></div>"+
+"<div class='pm'><span>متوسط تكلفة المتر</span><span>"+f(g/(MD=="villa"?AE:fn?A:A*GN))+(fn?" ج.م / م²":" ج.م / م² مبني")+"</span></div>";
+LAST=g;LA=A;SF=(mat+lab)?g/(mat+lab):1;chk();
+$("excl").textContent=fn?("المرحلة: "+STGN[STG]+". لا يشمل: "+EX()+" أسعار كل بند بتتغير حسب المستوى من مصفوفة تقديرية."+(MD=="villa"?" الواجهات محسوبة من محيط تقريبي (شكل مربع) لمساحة الدور وعدد الأدوار، والسلالم والسور وحمام السباحة بمعدلات تقريبية.":"")):"تقدير مبدئي للميزانية بمعدلات تقريبية ولا يغني عن المقايسة الإنشائية من مهندس. لا يشمل: التصميم والرخص، المحارة والتأسيسات والتشطيب، ثمن الأرض، العزل والمرافق"+(MD=="tower"?"، وأي مصاعد غير مضافة.":".");
+$("hCo").textContent=$("co").value.trim()||(fn?"مقايسة تشطيب":"تقدير عظم مبدئي");
+$("hMeta").textContent=MD=="villa"?VM():fn?f(A)+" م² | "+R+" غرف | "+B+" حمام | تشطيب "+LVN[lvl]+" | "+STGS[STG]:f(A)+" م² للدور | "+GN+" أدوار | "+(GR?"لبشة":"قواعد")+(MD=="tower"&&GL?" | "+GL+" مصعد":"");
+$("hDate").textContent=new Date().toLocaleDateString("ar-EG");
+var c=$("cl").value.trim();$("hCl").textContent=c?"العميل: "+c:"";
+}
+function build(){
+var h="",last=-1;
+ITEMS.forEach(function(i){
+if(!vis(i))return;
+if(i.s!==last){h+="<tr class='sec'><td colspan='5'>"+SEC[i.s]+"</td></tr>";last=i.s}
+var p=P[i.id];
+h+="<tr><td><input type='checkbox' data-k='"+i.id+"' data-f='on'"+(p.on?" checked":"")+" aria-label='تضمين "+i.n+"'></td><td>"+i.n+" <small>("+i.u+")</small></td>"+
+"<td><input type='number' inputmode='decimal' min='0' data-k='"+i.id+"' data-f='m' value='"+p.m+"'></td>"+
+"<td><input type='number' inputmode='decimal' min='0' data-k='"+i.id+"' data-f='l' value='"+p.l+"'></td>"+
+"<td><span class='bd "+i.src+"'>"+SRC[i.src]+"</span></td></tr>"});
+$("ptb").innerHTML=h}
+$("ptb").addEventListener("input",function(e){var t=e.target,k=t.dataset.k;if(!k)return;
+if(t.dataset.f==="on")P[k].on=t.checked;else{var v=parseFloat(t.value);P[k][t.dataset.f]=isNaN(v)||v<0?0:v}
+save();calc()});
+["area","rooms","baths","reg","waste","prof","co","cl"].forEach(function(i){$(i).addEventListener("input",calc)});
+$("lvl").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;lvl=b.dataset.v;
+Array.prototype.forEach.call($("lvl").children,function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});calc()});
+function setMode(m){MD=m;Array.prototype.forEach.call($("md").children,function(b){b.setAttribute("aria-pressed",b.dataset.m===m?"true":"false")});
+var fm=m=="fin"||m=="villa",sm=m=="house"||m=="tower";
+function sh(c,v){Array.prototype.forEach.call(document.querySelectorAll(c),function(e){e.style.display=v?"":"none"})}
+sh(".fin",fm);sh(".apt",m=="fin");sh(".vil",m=="villa");sh(".flr",m!="fin");sh(".str",sm);
+$("fndw").style.display=m=="house"?"":"none";$("liftw").style.display=m=="tower"?"":"none";
+$("h2u").textContent=m=="fin"?"بيانات الوحدة":m=="villa"?"بيانات الفيلا":"بيانات المبنى";$("larea").textContent=m=="fin"?"المساحة بالمتر المربع":"مساحة الدور الواحد بالمتر المربع";
+$("chk").style.display=m=="fin"?"":"none";
+$("snote").textContent=m=="fin"?"المقايسة تقديرية للاسترشاد، وتعتمد على الأسعار المدخلة وعلى معاينة الموقع. الكميات محسوبة بقواعد تقريبية لشقة سكنية عادية.":m=="villa"?"التشطيب الداخلي بنفس معدلات الشقة على إجمالي المسطح المبني. الواجهات والسلالم والسور من معدلات تقريبية تعتمد على مساحة الدور وعدد الأدوار.":"الكميات من معدلات تقريبية لمتر البناء (خرسانة وحديد وطوب) لمبنى سكني معتاد. التصميم الإنشائي الفعلي هو اللي بيحدد الكميات النهائية.";
+build();calc()}
+$("md").addEventListener("click",function(e){var b=e.target.closest("button");if(b)setMode(b.dataset.m)});
+$("stg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;STG=b.dataset.g;Array.prototype.forEach.call($("stg").children,function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});calc()});
+["floors","fnd","lifts","land","fac","vr","vb","vk","parea","bsm","pool","lnd"].forEach(function(i){$(i).addEventListener("input",calc);$(i).addEventListener("change",calc)});
+function syncAdds(){Array.prototype.forEach.call(document.querySelectorAll("[data-grp]"),function(c){c.checked=GRP[c.dataset.grp].every(function(id){return P[id].on})});$("klw").style.display=P.kt.on?"":"none"}
+$("adds").addEventListener("change",function(e){var c=e.target;if(!c.dataset.grp)return;GRP[c.dataset.grp].forEach(function(id){P[id].on=c.checked});save();syncAdds();build();calc()});
+$("flt").addEventListener("change",function(){FLK=this.value;calc()});$("klen").addEventListener("input",calc);
+$("rs").addEventListener("click",function(){try{localStorage.removeItem(K)}catch(e){}load();syncAdds();build();calc()});
+$("pr").addEventListener("click",function(){try{window.print()}catch(e){}});
+var API="";var REVOK=false,REPORT_PRICE=100,REVSALT="90380bf829ee404f",REVT="",REVEXP="",ST=[],SF=1,REP="",LAST=0,LA=0,REVIEW_PRICE=150,WA="201121587714";
+var DEV=(function(){try{var d=localStorage.getItem("muq_dev");if(!d){d=(crypto.randomUUID?crypto.randomUUID():String(Math.random()).slice(2)+Date.now());localStorage.setItem("muq_dev",d)}return d}catch(e){return "tmp-"+Math.random().toString(36).slice(2,12)}})();
+var CODE="",DATA={projects:[],prices:[]};
+var ERR={invalid:"الكود غير صحيح.",revoked:"الكود موقوف. تواصل معنا.",expired:"انتهى الاشتراك. جدّد وابعتلنا على واتساب.",device_limit:"الكود وصل لأقصى عدد أجهزة. تواصل معنا لتصفير الأجهزة.",device_not_registered:"الجهاز غير مفعّل."};
+function post(path,body){return fetch(API+path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}).then(function(r){return r.json().then(function(j){if(!r.ok)throw j;return j})},function(){throw {error:"net"}})}
+function say(t){$("actMsg").textContent=t}
+function proOn(j){REVOK=true;chk();$("lockBox").style.display="none";$("proBox").style.display="block";$("brand").style.display="none";$("who").textContent="مفعّل لـ "+j.name+" حتى "+new Date(j.exp).toLocaleDateString("ar-EG");
+return post("/data/get",{code:CODE,device:DEV}).then(function(d){DATA=d;lists()})}
+function proOff(){CODE="";$("brand").style.display="";$("lockBox").style.display="block";$("proBox").style.display="none"}
+function activate(code,silent){return post("/activate",{code:code,device:DEV}).then(function(j){CODE=code;try{localStorage.setItem("muq_lic",code)}catch(e){}return proOn(j)}).catch(function(e){if(!silent)say(ERR[e.error]||"تعذر الاتصال، جرّب تاني.");else if(e.error&&e.error!=="net"){try{localStorage.removeItem("muq_lic")}catch(x){}}})}
+function sync(){return post("/data/put",{code:CODE,device:DEV,data:DATA}).catch(function(e){say(ERR[e.error]||"تعذر الحفظ، جرّب تاني.")})}
+function setLvl(v){lvl=v;Array.prototype.forEach.call($("lvl").children,function(x){x.setAttribute("aria-pressed",x.dataset.v===v?"true":"false")})}
+var FIELDS=["area","rooms","baths","reg","waste","prof","co","cl"];
+function row(box,arr,i,loadFn){var d=document.createElement("div");d.className="li";var n=document.createElement("span");n.textContent=arr[i].n;var a=document.createElement("button");a.type="button";a.textContent="فتح";a.onclick=function(){loadFn(arr[i])};var x=document.createElement("button");x.type="button";x.textContent="حذف";x.onclick=function(){arr.splice(i,1);sync();lists()};d.append(n,a,x);box.append(d)}
+function lists(){var pl=$("plist"),sl=$("slist");pl.replaceChildren();sl.replaceChildren();
+DATA.projects.forEach(function(p,i){row(pl,DATA.projects,i,function(p){FIELDS.forEach(function(f){$(f).value=p.v[f]});setLvl(p.lvl);P=JSON.parse(JSON.stringify(p.P));ITEMS.forEach(function(it){if(!P[it.id])P[it.id]={m:it.m,l:it.l,on:it.on}});save();build();calc()})});
+DATA.prices.forEach(function(p,i){row(sl,DATA.prices,i,function(p){ITEMS.forEach(function(it){if(p.P[it.id])P[it.id]=JSON.parse(JSON.stringify(p.P[it.id]))});save();build();calc()})})}
+function upsert(arr,o){var k=arr.findIndex(function(x){return x.n===o.n});if(k>=0)arr[k]=o;else arr.push(o)}
+$("act").onclick=function(){var c=$("lic").value.trim();if(!c)return say("اكتب الكود.");if(!API)return say("النسخة المدفوعة قيد التجهيز.");say("جاري التحقق...");activate(c)};
+$("psave").onclick=function(){var n=$("pname").value.trim();if(!n)return;var v={};FIELDS.forEach(function(f){v[f]=$(f).value});upsert(DATA.projects,{n:n.slice(0,60),v:v,lvl:lvl,P:JSON.parse(JSON.stringify(P))});$("pname").value="";sync();lists()};
+$("ssave").onclick=function(){var n=$("sname").value.trim();if(!n)return;upsert(DATA.prices,{n:n.slice(0,60),P:JSON.parse(JSON.stringify(P))});$("sname").value="";sync();lists()};
+if(!API){$("proInfo").textContent="النسخة المدفوعة قيد التجهيز."}
+else{try{var sv=localStorage.getItem("muq_lic");if(sv)activate(sv,true)}catch(e){}}
+$("qsec").innerHTML=SEC.slice(0,8).map(function(n,i){return "<div><label for='qs"+i+"'>"+n+"</label><input id='qs"+i+"' type='number' inputmode='decimal' min='0'></div>"}).join("");
+var FL=[["بنود مجمّعة بدون تفصيل","اطلب تفصيل كل بند بكميته وسعره"],["مواد بدون ماركة أو مواصفات","اشترط مواصفات وماركات مكتوبة"],["مفيش بنود فك وتكسير أو عزل أو شيل مخلفات","اسأل هل مشمولة ولا على حسابك"],["دفعة مقدمة كبيرة (أكتر من 30%)","اربط الدفعات بمراحل تنفيذ فعلية"],["مفيش مدة تنفيذ أو غرامة تأخير","اكتب مدة وغرامة تأخير في العقد"],["مفيش ضمان على الأعمال","اطلب ضمان مكتوب"],["عبارة أعمال إضافية على الحساب","حدد سقف للإضافات وأسعارها مقدمًا"],["مش واضح مين بيشتري المواد","وضّح مين بيشتري ومين بيتحمل الهالك"]];
+$("qfl").innerHTML=FL.map(function(p,i){return "<label style='display:flex;gap:8px;align-items:center;margin:6px 0;font-weight:normal'><input type='checkbox' id='qf"+i+"'>"+p[0]+"</label>"}).join("");
+function chk(){var q=parseFloat($("qt").value),r=$("qres"),a=$("qwa"),c=$("qcp");
+if(!q||q<=0||!LAST){r.innerHTML="";a.style.display="none";c.style.display="none";$("qlock").style.display="none";return}
+var d=(q-LAST)/LAST*100,ad=Math.abs(Math.round(d)),x;
+if(d>25)x="العرض أعلى من المقايسة بحوالي "+ad+"% ("+f(q-LAST)+" ج.م). فرق كبير: اطلب من المقاول تفصيل البنود والكميات.";
+else if(d>10)x="العرض أعلى من المقايسة بحوالي "+ad+"%. ممكن يكون مبرر (خامات أعلى أو هامش ربح)، فتفاوض واطلب التفصيل.";
+else if(d>=-10)x="العرض قريب من المقايسة (فرق "+ad+"%). في المعقول.";
+else x="العرض أقل من المقايسة بحوالي "+ad+"%. اتأكد إنه شامل كل البنود وإن الخامات مش أقل جودة.";
+var rows="",rt="",fl=[],miss=[],sumV=0,nf=0;
+SEC.slice(0,8).forEach(function(sn,i){var v=parseFloat($("qs"+i).value),bs=Math.round((ST[i]||0)*SF);
+if(bs&&(!v||v<=0)){miss.push(sn);return}if(!v||v<=0||!bs)return;nf++;sumV+=v;var dd=Math.round((v-bs)/bs*100),sg=(dd>0?"+":"")+dd+"%";
+if(dd>25)fl.push(["r","قسم "+sn+" أعلى من المقايسة بـ"+dd+"%"]);else if(dd>10)fl.push(["a","قسم "+sn+" أعلى من المقايسة بـ"+dd+"%"]);else if(dd<-30)fl.push(["r","قسم "+sn+" أقل بكتير ("+Math.abs(dd)+"%): غالبًا بند ناقص أو خامات أقل جودة"]);
+rows+="<tr><td>"+sn+"</td><td class='n'>"+f(bs)+"</td><td class='n'>"+f(v)+"</td><td class='n'>"+sg+"</td></tr>";
+rt+="\n- "+sn+": الأداة "+f(bs)+" | العرض "+f(v)+" | "+sg});
+if(d>25||d<-25)fl.push(["r","إجمالي العرض بعيد عن المقايسة بـ"+ad+"%"]);else if(d>10)fl.push(["a","إجمالي العرض أعلى من المقايسة بـ"+ad+"%"]);else if(d<-10)fl.push(["a","إجمالي العرض أقل من المقايسة بـ"+ad+"%"]);
+if(nf){miss.forEach(function(n){fl.push(["a","قسم "+n+" مش موجود في العرض: اسأل هل هو مشمول"])});
+if(!miss.length&&Math.abs(sumV-q)/q>0.05)fl.push(["a","مجموع الأقسام ("+f(sumV)+") مختلف عن إجمالي العرض ("+f(q)+"): فيه بنود إضافية أو مجمّعة"])}
+FL.forEach(function(p,i){if($("qf"+i).checked)fl.push(["a",p[0]+": "+p[1]])});
+fl.sort(function(a,b){return a[0]==b[0]?0:a[0]=="r"?-1:1});
+var fx="",ft="";fl.forEach(function(p){var ic=p[0]=="r"?"🔴 ":"🟡 ";fx+="<li style='list-style:none;margin:4px 0'>"+ic+p[1]+"</li>";ft+="\n- "+ic+p[1]});
+var nr=fl.filter(function(p){return p[0]=="r"}).length,na=fl.length-nr;
+if(REVOK)r.innerHTML="<p>"+x+" (مؤشر للاسترشاد، مش حكم نهائي.)</p>"+(rows?"<table style='width:100%;font-size:13px'><tr><th>القسم</th><th>الأداة</th><th>العرض</th><th>الفرق</th></tr>"+rows+"</table>":"")+(fx?"<ul style='padding:0;margin:10px 0'>"+fx+"</ul>":"");
+else r.innerHTML="<p>"+x+" (مؤشر للاسترشاد، مش حكم نهائي.)</p>"+(fl.length?"<p>🔒 اكتشفنا "+(nr?nr+" علامة خطر 🔴 ":"")+(na?na+" علامة انتباه 🟡":"")+". افتح التقرير الكامل عشان تشوف تفاصيلها وجدول الأقسام والتقرير الجاهز للنسخ.</p>":"<p>🔒 اكتب إجمالي الأقسام وعلّم على أي ملاحظات، وافتح التقرير الكامل لتفاصيل الفروق.</p>");
+if(REVOK&&REVEXP)r.innerHTML+="<p class='note' style='padding:0'>كودك شغال حتى "+REVEXP+"</p>";
+REP="تقرير مراجعة عرض مقاول\n"+f(LA)+" م² | تشطيب "+LVN[lvl]+"\nمقايسة الأداة: "+f(LAST)+" ج.م\nعرض المقاول: "+f(q)+" ج.م\nالخلاصة: "+x+(rt?"\n\nالفروق حسب القسم:"+rt:"")+(ft?"\n\nعلامات الانتباه:"+ft:"")+"\n\nمراجعة مكتبية للمستندات بأسعار تقديرية، وليست معاينة موقع.";
+c.style.display=REVOK?"flex":"none";$("qlock").style.display=REVOK?"none":"block";
+if(REVOK){a.textContent="راجع العرض بالتفصيل بند بند ("+REVIEW_PRICE+" جنيه)";
+a.href="https://wa.me/"+WA+"?text="+encodeURIComponent("عايز مراجعة تفصيلية لعرض مقاول. المساحة "+f(LA)+" م²، تشطيب "+LVN[lvl]+"، مقايسة الأداة "+f(LAST)+" ج.م، وعرض المقاول "+f(q)+" ج.م")}
+else{a.textContent="افتح التقرير الكامل لمدة 30 يوم ("+REPORT_PRICE+" جنيه)";
+a.href="https://wa.me/"+WA+"?text="+encodeURIComponent("عايز كود فتح تقرير مراجعة العرض الكامل")}
+a.style.display="flex"}
+function sha(s){return crypto.subtle.digest("SHA-256",new TextEncoder().encode(s)).then(function(b){return Array.prototype.map.call(new Uint8Array(b),function(x){return("0"+x.toString(16)).slice(-2)}).join("")})}
+function revTry(code,silent){code=code.trim().toUpperCase();var p=code.split("-"),m=$("rmsg");
+if(p.length!=4||!/^[RMY]$/.test(p[0])||!/^\d{6}$/.test(p[1])){if(!silent)m.textContent="الكود غير صحيح.";return Promise.resolve()}
+return sha(p[0]+p[1]+p[2]+REVSALT).then(function(h){
+if(h.slice(0,4).toUpperCase()!==p[3]){if(!silent)m.textContent="الكود غير صحيح.";return}
+var e=new Date(2000+ +p[1].slice(0,2),+p[1].slice(2,4)-1,+p[1].slice(4,6),23,59,59);
+if(isNaN(e)||e<new Date()){try{localStorage.removeItem("muq_rev")}catch(x){}REVOK=false;m.textContent="انتهت صلاحية الكود. اطلب كود جديد.";chk();return}
+REVOK=true;REVT=p[0];REVEXP=e.toLocaleDateString("ar-EG");try{localStorage.setItem("muq_rev",code)}catch(x){}
+m.textContent="";if(p[0]!="R")$("brand").style.display="none";chk()}).catch(function(){if(!silent)m.textContent="التحقق يعمل فقط على رابط https."})}
+$("rgo").addEventListener("click",function(){revTry($("rcode").value)});
+try{var sv=localStorage.getItem("muq_rev");if(sv)revTry(sv,true)}catch(e){}
+$("qcp").addEventListener("click",function(){var b=this;try{navigator.clipboard.writeText(REP);b.textContent="تم النسخ"}catch(e){b.textContent="النسخ غير متاح"}setTimeout(function(){b.textContent="انسخ تقرير المراجعة"},1500)});
+$("chk").addEventListener("input",chk);$("chk").addEventListener("change",chk);
+$("regsel").addEventListener("change",function(){if(this.value){$("reg").value=this.value;calc()}});
+$("reg").addEventListener("input",function(){$("regsel").value=""});
+load();syncAdds();build();calc();
+</script>
+</body>
+</html>
