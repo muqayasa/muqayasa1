@@ -130,14 +130,18 @@ body{background:#fff;color:#000}.tape,.side,details,.noprint,h1,.sub{display:non
 <div class="card" id="pro" style="margin-top:14px">
 <h2>النسخة المدفوعة للمقاولين</h2>
 <div id="lockBox">
-<p class="note" style="padding:0" id="proInfo">حفظ المشاريع ومجموعات الأسعار، ومتاحة على جهازين.</p>
+<p class="note" style="padding:0" id="proInfo">للمقاولين والمكاتب: مقايسات غير محدودة، حفظ مشاريعك ومجموعات أسعارك، شروط وملاحظات تظهر في عرض السعر، وPDF باسم مكتبك من غير علامة الأداة، وتقرير مراجعة العروض كامل.</p>
+<p class="note" style="padding:6px 0 0"><b>300 جنيه شهريًا أو 2,500 جنيه سنويًا.</b></p>
+<a class="btn" id="pbuy" href="#" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;text-decoration:none;margin-bottom:6px">اطلب كود التفعيل</a>
 <label for="lic">كود التفعيل</label>
-<input id="lic" type="text" dir="ltr" placeholder="XXXX-XXXX-XXXX-XXXX" autocomplete="off">
+<input id="lic" type="text" dir="ltr" placeholder="M-XXXXXX-XXXX-XXXX" autocomplete="off">
 <button class="btn" id="act" type="button">تفعيل</button>
 <p class="note" style="padding:8px 0 0" id="actMsg" role="status"></p>
 </div>
 <div id="proBox" style="display:none">
 <p id="who" style="margin:0 0 8px"></p>
+<label for="tm">شروط وملاحظات تظهر أسفل عرض السعر (PDF)</label>
+<textarea id="tm" rows="4" placeholder="مثال: الدفعة المقدمة 30%، مدة التنفيذ 60 يوم، ضمان سنة على الأعمال"></textarea>
 <label for="pname">حفظ المشروع الحالي باسم</label>
 <input id="pname" type="text" placeholder="مثال: شقة أحمد - الفيوم">
 <button class="btn" id="psave" type="button">حفظ المشروع</button>
@@ -146,6 +150,11 @@ body{background:#fff;color:#000}.tape,.side,details,.noprint,h1,.sub{display:non
 <input id="sname" type="text" placeholder="مثال: أسعار الفيوم">
 <button class="btn ghost" id="ssave" type="button">حفظ مجموعة الأسعار</button>
 <div id="slist"></div>
+<p class="note" style="padding:10px 0 0">بياناتك محفوظة على جهازك فقط. خد نسخة احتياطية من وقت لوقت.</p>
+<button class="btn ghost" id="bk" type="button">نسخ نسخة احتياطية</button>
+<label for="bkin">استرجاع نسخة احتياطية (الصق النص هنا)</label>
+<textarea id="bkin" rows="2" dir="ltr"></textarea>
+<button class="btn ghost" id="rst" type="button" style="margin-top:8px">استرجاع</button>
 </div>
 </div>
 </div>
@@ -163,6 +172,7 @@ body{background:#fff;color:#000}.tape,.side,details,.noprint,h1,.sub{display:non
 <div class="tot" id="tot"></div>
 <p class="note" id="snote">المقايسة تقديرية للاسترشاد، وتعتمد على الأسعار المدخلة وعلى معاينة الموقع. الكميات محسوبة بقواعد تقريبية لشقة سكنية عادية.</p>
 <p class="note" id="excl"></p>
+<p class="note" id="tmo" style="white-space:pre-line;display:none"></p>
 <p class="note print-only" id="brand">أُعدّت بواسطة أداة مقايسة التشطيب، احسب مقايسة شقتك مجانًا.</p>
 </div>
 
@@ -383,29 +393,26 @@ $("adds").addEventListener("change",function(e){var c=e.target;if(!c.dataset.grp
 $("flt").addEventListener("change",function(){FLK=this.value;calc()});$("klen").addEventListener("input",calc);
 $("rs").addEventListener("click",function(){try{localStorage.removeItem(K)}catch(e){}load();syncAdds();build();calc()});
 $("pr").addEventListener("click",function(){try{window.print()}catch(e){}});
-var API="";var REVOK=false,REPORT_PRICE=100,REVSALT="90380bf829ee404f",REVT="",REVEXP="",ST=[],SF=1,REP="",LAST=0,LA=0,REVIEW_PRICE=150,WA="201121587714";
-var DEV=(function(){try{var d=localStorage.getItem("muq_dev");if(!d){d=(crypto.randomUUID?crypto.randomUUID():String(Math.random()).slice(2)+Date.now());localStorage.setItem("muq_dev",d)}return d}catch(e){return "tmp-"+Math.random().toString(36).slice(2,12)}})();
-var CODE="",DATA={projects:[],prices:[]};
-var ERR={invalid:"الكود غير صحيح.",revoked:"الكود موقوف. تواصل معنا.",expired:"انتهى الاشتراك. جدّد وابعتلنا على واتساب.",device_limit:"الكود وصل لأقصى عدد أجهزة. تواصل معنا لتصفير الأجهزة.",device_not_registered:"الجهاز غير مفعّل."};
-function post(path,body){return fetch(API+path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}).then(function(r){return r.json().then(function(j){if(!r.ok)throw j;return j})},function(){throw {error:"net"}})}
+var LERR="",REVOK=false,REPORT_PRICE=100,REVSALT="90380bf829ee404f",REVT="",REVEXP="",ST=[],SF=1,REP="",LAST=0,LA=0,REVIEW_PRICE=150,WA="201121587714",DATA={projects:[],prices:[]},PRO=false;
 function say(t){$("actMsg").textContent=t}
-function proOn(j){REVOK=true;chk();$("lockBox").style.display="none";$("proBox").style.display="block";$("brand").style.display="none";$("who").textContent="مفعّل لـ "+j.name+" حتى "+new Date(j.exp).toLocaleDateString("ar-EG");
-return post("/data/get",{code:CODE,device:DEV}).then(function(d){DATA=d;lists()})}
-function proOff(){CODE="";$("brand").style.display="";$("lockBox").style.display="block";$("proBox").style.display="none"}
-function activate(code,silent){return post("/activate",{code:code,device:DEV}).then(function(j){CODE=code;try{localStorage.setItem("muq_lic",code)}catch(e){}return proOn(j)}).catch(function(e){if(!silent)say(ERR[e.error]||"تعذر الاتصال، جرّب تاني.");else if(e.error&&e.error!=="net"){try{localStorage.removeItem("muq_lic")}catch(x){}}})}
-function sync(){return post("/data/put",{code:CODE,device:DEV,data:DATA}).catch(function(e){say(ERR[e.error]||"تعذر الحفظ، جرّب تاني.")})}
+function dsave(){try{localStorage.setItem("muq_pro_data",JSON.stringify(DATA))}catch(e){say("تعذر الحفظ على الجهاز.")}}
+function dload(){try{var d=JSON.parse(localStorage.getItem("muq_pro_data")||"null");if(d&&Array.isArray(d.projects)&&Array.isArray(d.prices))DATA=d}catch(e){}}
+function tm(){var v=$("tm").value.trim(),o=$("tmo");o.textContent=PRO&&v?"الشروط والملاحظات:\n"+v:"";o.style.display=PRO&&v?"":"none"}
+function proOn(t,e){PRO=true;REVOK=true;$("lockBox").style.display="none";$("proBox").style.display="block";$("brand").style.display="none";$("who").textContent="مفعّل ("+(t=="Y"?"سنوي":"شهري")+") حتى "+e;dload();lists();tm();chk()}
+function proOff(){PRO=false;$("brand").style.display="";$("lockBox").style.display="block";$("proBox").style.display="none";tm()}
 function setLvl(v){lvl=v;Array.prototype.forEach.call($("lvl").children,function(x){x.setAttribute("aria-pressed",x.dataset.v===v?"true":"false")})}
-var FIELDS=["area","rooms","baths","reg","waste","prof","co","cl"];
-function row(box,arr,i,loadFn){var d=document.createElement("div");d.className="li";var n=document.createElement("span");n.textContent=arr[i].n;var a=document.createElement("button");a.type="button";a.textContent="فتح";a.onclick=function(){loadFn(arr[i])};var x=document.createElement("button");x.type="button";x.textContent="حذف";x.onclick=function(){arr.splice(i,1);sync();lists()};d.append(n,a,x);box.append(d)}
+var FIELDS=["area","rooms","baths","reg","waste","prof","co","cl","tm"];
+function row(box,arr,i,loadFn){var d=document.createElement("div");d.className="li";var n=document.createElement("span");n.textContent=arr[i].n;var a=document.createElement("button");a.type="button";a.textContent="فتح";a.onclick=function(){loadFn(arr[i])};var x=document.createElement("button");x.type="button";x.textContent="حذف";x.onclick=function(){arr.splice(i,1);dsave();lists()};d.append(n,a,x);box.append(d)}
 function lists(){var pl=$("plist"),sl=$("slist");pl.replaceChildren();sl.replaceChildren();
-DATA.projects.forEach(function(p,i){row(pl,DATA.projects,i,function(p){FIELDS.forEach(function(f){$(f).value=p.v[f]});setLvl(p.lvl);P=JSON.parse(JSON.stringify(p.P));ITEMS.forEach(function(it){if(!P[it.id])P[it.id]={m:it.m,l:it.l,on:it.on}});save();build();calc()})});
+DATA.projects.forEach(function(p,i){row(pl,DATA.projects,i,function(p){FIELDS.forEach(function(f){$(f).value=p.v[f]||""});tm();setLvl(p.lvl);P=JSON.parse(JSON.stringify(p.P));ITEMS.forEach(function(it){if(!P[it.id])P[it.id]={m:it.m,l:it.l,on:it.on}});save();build();calc()})});
 DATA.prices.forEach(function(p,i){row(sl,DATA.prices,i,function(p){ITEMS.forEach(function(it){if(p.P[it.id])P[it.id]=JSON.parse(JSON.stringify(p.P[it.id]))});save();build();calc()})})}
 function upsert(arr,o){var k=arr.findIndex(function(x){return x.n===o.n});if(k>=0)arr[k]=o;else arr.push(o)}
-$("act").onclick=function(){var c=$("lic").value.trim();if(!c)return say("اكتب الكود.");if(!API)return say("النسخة المدفوعة قيد التجهيز.");say("جاري التحقق...");activate(c)};
-$("psave").onclick=function(){var n=$("pname").value.trim();if(!n)return;var v={};FIELDS.forEach(function(f){v[f]=$(f).value});upsert(DATA.projects,{n:n.slice(0,60),v:v,lvl:lvl,P:JSON.parse(JSON.stringify(P))});$("pname").value="";sync();lists()};
-$("ssave").onclick=function(){var n=$("sname").value.trim();if(!n)return;upsert(DATA.prices,{n:n.slice(0,60),P:JSON.parse(JSON.stringify(P))});$("sname").value="";sync();lists()};
-if(!API){$("proInfo").textContent="النسخة المدفوعة قيد التجهيز."}
-else{try{var sv=localStorage.getItem("muq_lic");if(sv)activate(sv,true)}catch(e){}}
+$("act").onclick=function(){var c=$("lic").value.trim();if(!c)return say("اكتب الكود.");say("جاري التحقق...");revTry(c).then(function(){say(PRO?"":(LERR||"الكود غير صحيح أو مش كود مقاولين."))})};
+$("psave").onclick=function(){var n=$("pname").value.trim();if(!n)return;var v={};FIELDS.forEach(function(f){v[f]=$(f).value});upsert(DATA.projects,{n:n.slice(0,60),v:v,lvl:lvl,P:JSON.parse(JSON.stringify(P))});$("pname").value="";dsave();lists()};
+$("ssave").onclick=function(){var n=$("sname").value.trim();if(!n)return;upsert(DATA.prices,{n:n.slice(0,60),P:JSON.parse(JSON.stringify(P))});$("sname").value="";dsave();lists()};
+$("tm").addEventListener("input",tm);
+$("bk").onclick=function(){var a=$("bkin");a.value=JSON.stringify(DATA);a.select();try{document.execCommand("copy");say("اتنسخت النسخة الاحتياطية. الصقها في مكان آمن (مثلًا رسالة لنفسك).")}catch(e){say("انسخ النص اللي ظهر بإيدك.")}};
+$("rst").onclick=function(){try{var d=JSON.parse($("bkin").value);if(!d||!Array.isArray(d.projects)||!Array.isArray(d.prices))throw 0;DATA=d;dsave();lists();say("اتسترجعت البيانات.")}catch(e){say("النص غير صحيح.")}};
 $("qsec").innerHTML=SEC.slice(0,8).map(function(n,i){return "<div><label for='qs"+i+"'>"+n+"</label><input id='qs"+i+"' type='number' inputmode='decimal' min='0'></div>"}).join("");
 var FL=[["بنود مجمّعة بدون تفصيل","اطلب تفصيل كل بند بكميته وسعره"],["مواد بدون ماركة أو مواصفات","اشترط مواصفات وماركات مكتوبة"],["مفيش بنود فك وتكسير أو عزل أو شيل مخلفات","اسأل هل مشمولة ولا على حسابك"],["دفعة مقدمة كبيرة (أكتر من 30%)","اربط الدفعات بمراحل تنفيذ فعلية"],["مفيش مدة تنفيذ أو غرامة تأخير","اكتب مدة وغرامة تأخير في العقد"],["مفيش ضمان على الأعمال","اطلب ضمان مكتوب"],["عبارة أعمال إضافية على الحساب","حدد سقف للإضافات وأسعارها مقدمًا"],["مش واضح مين بيشتري المواد","وضّح مين بيشتري ومين بيتحمل الهالك"]];
 $("qfl").innerHTML=FL.map(function(p,i){return "<label style='display:flex;gap:8px;align-items:center;margin:6px 0;font-weight:normal'><input type='checkbox' id='qf"+i+"'>"+p[0]+"</label>"}).join("");
@@ -439,21 +446,35 @@ a.href="https://wa.me/"+WA+"?text="+encodeURIComponent("عايز مراجعة ت
 else{a.textContent="افتح التقرير الكامل لمدة 30 يوم ("+REPORT_PRICE+" جنيه)";
 a.href="https://wa.me/"+WA+"?text="+encodeURIComponent("عايز كود فتح تقرير مراجعة العرض الكامل")}
 a.style.display="flex"}
-function sha(s){return crypto.subtle.digest("SHA-256",new TextEncoder().encode(s)).then(function(b){return Array.prototype.map.call(new Uint8Array(b),function(x){return("0"+x.toString(16)).slice(-2)}).join("")})}
-function revTry(code,silent){code=code.trim().toUpperCase();var p=code.split("-"),m=$("rmsg");
+function sha256(ascii){function rr(v,a){return(v>>>a)|(v<<(32-a))}var mp=Math.pow,mw=mp(2,32),L="length",i,j,res="",words=[],bl=ascii[L]*8,hash=sha256.h=sha256.h||[],k=sha256.k=sha256.k||[],pc=k[L],ic={};
+for(var c=2;pc<64;c++){if(!ic[c]){for(i=0;i<313;i+=c)ic[i]=c;hash[pc]=(mp(c,.5)*mw)|0;k[pc++]=(mp(c,1/3)*mw)|0}}
+ascii+="\x80";while(ascii[L]%64-56)ascii+="\x00";
+for(i=0;i<ascii[L];i++){j=ascii.charCodeAt(i);if(j>>8)return"";words[i>>2]|=j<<((3-i)%4)*8}
+words[words[L]]=((bl/mw)|0);words[words[L]]=bl;
+for(j=0;j<words[L];){var w=words.slice(j,j+=16),oh=hash;hash=hash.slice(0,8);
+for(i=0;i<64;i++){var w15=w[i-15],w2=w[i-2],a=hash[0],e=hash[4];
+var t1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]+(w[i]=(i<16)?w[i]:(w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0);
+var t2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+hash=[(t1+t2)|0].concat(hash);hash[4]=(hash[4]+t1)|0}
+for(i=0;i<8;i++)hash[i]=(hash[i]+oh[i])|0}
+for(i=0;i<8;i++)for(j=3;j+1;j--){var b=(hash[i]>>(j*8))&255;res+=((b<16)?0:"")+b.toString(16)}
+return res}
+function sha(s){return Promise.resolve(sha256(s))}
+function revTry(code,silent){LERR="";code=code.trim().toUpperCase();var p=code.split("-"),m=$("rmsg");
 if(p.length!=4||!/^[RMY]$/.test(p[0])||!/^\d{6}$/.test(p[1])){if(!silent)m.textContent="الكود غير صحيح.";return Promise.resolve()}
 return sha(p[0]+p[1]+p[2]+REVSALT).then(function(h){
 if(h.slice(0,4).toUpperCase()!==p[3]){if(!silent)m.textContent="الكود غير صحيح.";return}
 var e=new Date(2000+ +p[1].slice(0,2),+p[1].slice(2,4)-1,+p[1].slice(4,6),23,59,59);
-if(isNaN(e)||e<new Date()){try{localStorage.removeItem("muq_rev")}catch(x){}REVOK=false;m.textContent="انتهت صلاحية الكود. اطلب كود جديد.";chk();return}
+if(isNaN(e)||e<new Date()){try{localStorage.removeItem("muq_rev")}catch(x){}REVOK=false;LERR=m.textContent="انتهت صلاحية الكود. اطلب كود جديد.";chk();return}
 REVOK=true;REVT=p[0];REVEXP=e.toLocaleDateString("ar-EG");try{localStorage.setItem("muq_rev",code)}catch(x){}
-m.textContent="";if(p[0]!="R")$("brand").style.display="none";chk()}).catch(function(){if(!silent)m.textContent="التحقق يعمل فقط على رابط https."})}
+m.textContent="";if(p[0]=="R"){chk()}else proOn(p[0],REVEXP)}).catch(function(){if(!silent)m.textContent="التحقق يعمل فقط على رابط https."})}
 $("rgo").addEventListener("click",function(){revTry($("rcode").value)});
 try{var sv=localStorage.getItem("muq_rev");if(sv)revTry(sv,true)}catch(e){}
 $("qcp").addEventListener("click",function(){var b=this;try{navigator.clipboard.writeText(REP);b.textContent="تم النسخ"}catch(e){b.textContent="النسخ غير متاح"}setTimeout(function(){b.textContent="انسخ تقرير المراجعة"},1500)});
 $("chk").addEventListener("input",chk);$("chk").addEventListener("change",chk);
 $("regsel").addEventListener("change",function(){if(this.value){$("reg").value=this.value;calc()}});
 $("reg").addEventListener("input",function(){$("regsel").value=""});
+$("pbuy").href="https://wa.me/"+WA+"?text="+encodeURIComponent("عايز اشتراك مقاولين في أداة المقايسات (شهري 300 جنيه أو سنوي 2,500 جنيه)");
 load();syncAdds();build();calc();
 </script>
 </body>
